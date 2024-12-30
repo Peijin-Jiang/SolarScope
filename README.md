@@ -19,24 +19,10 @@ cd SolarScope
 pip install -r requirements.txt
 
 ## 3.Data Availability
-The data required to run the models is available on Google Drive:
+The fine tuning and validation data required to run the models is available on Google Drive:
 Download Data Here: https://drive.google.com/drive/folders/1--VpnyFNceSNRUuWiRHE3j8LVSQ0-alL?usp=drive_link
 
 Download and Replace Paths
 After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
 
-## Structure
-solar_CV/
-│
-├── Figure/                  # Model overview and visualizations
-├── Japan/                   # Prediction CSV
-├── MFA/                     # Material Flow Analysis Data
-├── src/                     # Source code for CV
-├── dMFA.ipynb               # Dynamic MFA notebook
-├── make_solar_pv_dataset.ipynb # CV Dataset preparation
-├── panel_prediction.ipynb   # Solar panel prediction
-├── prediction_image_import.ipynb # Load prediction images
-├── solar_pv_classifier.ipynb # Classification model fine tuning
-├── solar_pv_ctraining.ipynb # Segmentation model fine tuning
-└── requirements.txt         # Environment dependencies
-
+The prediction images for Kamakura, Japan can be processed and visualized by running the prediction_image_import.ipynb notebook (with your own Google Staic Maps API)
