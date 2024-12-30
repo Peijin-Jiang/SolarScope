@@ -13,6 +13,7 @@ To replicate this project and run the provided Jupyter Notebooks, follow the ste
 
 ### 1. Clone the Repository
 git clone https://github.com/Peijin-Jiang/SolarScope
+
 cd SolarScope
 
 ### 2. Install Dependencies
