@@ -26,4 +26,4 @@ Download Data Here: https://drive.google.com/drive/folders/1--VpnyFNceSNRUuWiRHE
 Download and Replace Paths
 After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
 
-The prediction images for Kamakura, Japan can be processed and visualized by running the prediction_image_import.ipynb notebook (with your own Google Staic Maps API)
+The prediction images for Kamakura, Japan can be obtained by running the prediction_image_import.ipynb notebook (with your own Google Staic Maps API)
