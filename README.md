@@ -19,7 +19,7 @@ cd SolarScope
 ### 2. Install Dependencies
 pip install -r requirements.txt
 
-## 3.Data Availability
+### 3.Data Availability
 The fine tuning and validation data required to run the models is available on Google Drive:
 Download Data Here: https://drive.google.com/drive/folders/1--VpnyFNceSNRUuWiRHE3j8LVSQ0-alL?usp=drive_link
 
