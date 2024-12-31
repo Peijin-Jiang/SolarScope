@@ -30,6 +30,5 @@ The fine tuning and validation data required to run the models is from four stud
 
 The prediction images for Kamakura, Japan can be obtained by running the prediction_image_import.ipynb notebook (with your own Google Staic Maps API)
 
-Replace Paths
 
 After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
