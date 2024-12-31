@@ -27,7 +27,9 @@ The fine tuning and validation data required to run the models is from four stud
 3) Kasmi, G., Saint-Drenan, Y.-M., Trebosc, D., Jolivet, R., Leloux, J., Sarr, B., & Dubus, L. (2023). A crowdsourced dataset of aerial images with annotated solar photovoltaic arrays and installation metadata. Scientific Data, 10(1), 59. https://doi.org/10.1038/s41597-023-01951-4
 4) Jiang, H., Yao, L., Lu, N., Qin, J., Liu, T., Liu, Y., & Zhou, C. (2021). Multi-resolution dataset for photovoltaic panel segmentation from satellite and aerial imagery. Earth System Science Data, 13(11), 5389–5401. https://doi.org/10.5194/essd-13-5389-2021
 
-Replace Paths
-After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
 
 The prediction images for Kamakura, Japan can be obtained by running the prediction_image_import.ipynb notebook (with your own Google Staic Maps API)
+
+Replace Paths
+
+After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
