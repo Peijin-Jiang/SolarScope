@@ -1,7 +1,7 @@
 # SolarScope: Estimating Urban Mining Potential of Distributed Solar Panels
 
 ## Project Overview
-**SolarScope** is a computer vision (CV) and material flow analysis (MFA)-based model designed to estimate the future urban mining potential of distributed solar panel materials. This project integrates satellite imagery, deep learning techniques, and material assessment to predict and analyze the spatial distribution and material recycling of installed solar panels over time.
+We developed SolarScope, an open-source model that integrates computer vision (CV) with dynamic material flow analysis (dMFA) to evaluate the urban mining potential of distributed PV panels. By leveraging satellite imagery and Vision Transformer (ViT) models, SolarScope achieves an AUROC of 0.92 for classification and a Dice score of 0.88 for segmenting distributed PV installations. This approach reduces reliance on manual surveys, providing a faster and more efficient method for acquiring distributed PV data. A case study in Kamakura, Japan, demonstrates SolarScope’s capability, estimating 2,109 t of material stock by 2024 and projecting 1,457 t of recyclable material from end-of-life PV panels between 2025 and 2050. These results reveal substantial opportunities to recover critical materials vital for renewable energy infrastructure. We believe this work supports sustainable resource management, advances circular economy initiatives, and strengthens the long-term resilience of solar energy systems.
 
 ### Model Overview
 The model architecture and workflow are illustrated below:
