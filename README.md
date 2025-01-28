@@ -6,7 +6,7 @@ The global transition to clean energy has created a pressing demand for critical
 ### Model Overview
 The model architecture and workflow are illustrated below:
 
-![Model Overview](Figure/Figure%201.png)
+![Model Overview](Figure/Figure_.png)
 
 ## Environment Setup
 To replicate this project and run the provided Jupyter Notebooks, follow the steps below to set up the required environment.
