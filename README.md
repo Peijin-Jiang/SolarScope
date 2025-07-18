@@ -6,7 +6,7 @@ The global transition to clean energy has created a pressing demand for critical
 ### Model Overview
 The model architecture and workflow are illustrated below:
 
-![Model Overview](Figure/Figure_.png)
+![Model Overview](Figure/Figure%201.png)
 
 ## Environment Setup
 To replicate this project and run the provided Jupyter Notebooks, follow the steps below to set up the required environment.
@@ -32,3 +32,6 @@ The prediction images for Kamakura, Japan can be obtained by running the predict
 
 
 After downloading the data, replace the paths in the Jupyter Notebooks to point to the corresponding local directories.
+
+### 4. Model Availability
+The finetuned DINOv2 model and Segformer-B5 model are stored here: https://drive.google.com/drive/folders/1eNHFISSINX_g-8BskpTayL5Mj0uysCcY?usp=sharing
