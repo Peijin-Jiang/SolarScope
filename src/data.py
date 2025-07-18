@@ -9,6 +9,7 @@ from PIL import Image
 import torchvision.transforms.functional as F
 from monai import transforms as monai_transforms
 from torch.utils.data import Dataset, DataLoader
+import time
 
 
 def augment_image_and_mask(image, mask, resize_size=1024, max_translate=128):
@@ -65,10 +66,14 @@ class SegmentationDataset(Dataset):
                 normalize: bool=True,
                 transform=None,
                 augmentation=False,
+                training_ratio=1.0, # [0.0, 1.0], 1.0 full set
                 folder_names=None):
         """This class is used to load the segmentation dataset"""
         # load the dataset csv
         self.dataset_csv = pd.read_csv(data_csv_root)
+        # subsample the training ratio
+        if training_ratio < 1.0:
+          self.dataset_csv = self.dataset_csv.sample(frac=training_ratio, random_state=42).reset_index(drop=True)
         self.img_paths, self.mask_paths = self.load_image_mask_paths()
         # set the ignore index
         self.ignore_index = ignore_index
@@ -94,6 +99,7 @@ class SegmentationDataset(Dataset):
         return len(self.img_paths)
 
     def __get_one_item__(self, idx):
+
         img_path, mask_path = self.img_paths[idx], self.mask_paths[idx]
         original_image = torch.tensor(np.array(Image.open(img_path).convert('RGB')))
         original_image = original_image.permute(2,0,1)
@@ -131,9 +137,10 @@ class SegmentationDataset(Dataset):
         return input_dict
     
     def __getitem__(self, idx):
-        for _ in range(10):
-            # try:
-          return self.__get_one_item__(idx)
-            # except Exception as e:
-            #     print(e)
-            #     idx = np.random.choice(len(self))
+        for _ in range(1000000):
+          try:
+            return self.__get_one_item__(idx)
+          except Exception as e:
+            print(e)
+            time.sleep(1)
+            idx = np.random.choice(len(self))

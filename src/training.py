@@ -162,17 +162,24 @@ def eval_one_epoch(model, val_dl, criterion, epoch, writer, image_size, args):
 def train_model(train_path, val_path, test_path, writer, args):
 
     model, processor, image_size, mask_size = models.load_model(args.model_name, args.device)
-    train_data = data.SegmentationDataset(train_path, image_size=image_size, mask_size=mask_size, transform=processor, augmentation=args.augmentation, model_name=args.model_name)
+    train_data = data.SegmentationDataset(train_path, image_size=image_size, mask_size=mask_size, transform=processor, augmentation=args.augmentation, model_name=args.model_name, training_ratio=args.training_ratio)
     val_data = data.SegmentationDataset(val_path, image_size=image_size, mask_size=mask_size, transform=processor, model_name=args.model_name)
     test_data = data.SegmentationDataset(test_path, image_size=image_size, mask_size=mask_size, transform=processor, model_name=args.model_name)
     # test_data[0]
     # raise
     criterion = get_criterion(args)
     if "sam" in args.model_name:
-      optimizer = torch.optim.Adam(model.mask_decoder.parameters(), lr=args.lr, weight_decay=0)
+      if args.optim == "adam":
+        optimizer = torch.optim.Adam(model.mask_decoder.parameters(), lr=args.lr, weight_decay=0)
+      elif args.optim == "adamw":
+        optimizer = torch.optim.AdamW(model.mask_decoder.parameters(), lr=args.lr, weight_decay=0)
     else:
-      optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=0)
+      if args.optim == "adam":
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=0)
+      elif args.optim == "adamw":
+        optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0)
     # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=0) # finetune all parameters
+  
 
     train_dl = DataLoader(train_data, batch_size=args.batch_size, num_workers=args.workers, shuffle=True)
     val_dl = DataLoader(val_data, batch_size=args.batch_size, num_workers=args.workers, shuffle=False)

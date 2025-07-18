@@ -13,6 +13,7 @@ import pandas as pd
 from PIL import Image
 from tqdm import tqdm
 import numpy as np
+import time
 
 
 def adjust_learning_rate(optimizer, epoch, lr, min_lr=1e-6, epochs=10, warmup_epochs=1):
@@ -128,21 +129,31 @@ def make_models_transforms(model_name, image_size, freeze_backbone=False):
 
 
 class ImageDataset(Dataset):
-    def __init__(self, csv_file, transform=None):
+    def __init__(self, csv_file, transform=None, training_ratio=1.0):
         self.data = pd.read_csv(csv_file)
+        if training_ratio < 1.0:
+          self.data = (
+              self.data
+              .sample(frac=training_ratio, random_state=42)
+              .reset_index(drop=True)
+          )
         self.transform = transform
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        img_path = self.data.iloc[idx, 0]
-        label = int(self.data.iloc[idx, 1])
-        image = Image.open(img_path).convert("RGB")
-        if self.transform:
-            image = self.transform(image)
-        return image, label
-
+        while True:
+          try:
+            img_path = self.data.iloc[idx, 0]
+            label = int(self.data.iloc[idx, 1])
+            image = Image.open(img_path).convert("RGB")
+            if self.transform:
+                image = self.transform(image)
+            return image, label
+          except Exception as e:
+            print(e)
+            time.sleep(1)
 
 def classification_metrics(y_true, y_pred, y_scores):
     acc = accuracy_score(y_true, y_pred)
@@ -159,7 +170,7 @@ def classification_metrics(y_true, y_pred, y_scores):
     return acc, bacc, auroc, auprc, overall_precision, overall_recall
 
 
-def train_model(model, train_loader, val_loader, criterion, optimizer, epochs=10, warmups=1, lr=0.001, save_dir="", resume_ckpt="", start_epoch=None):
+def train_model(model, train_loader, val_loader, criterion, optimizer, epochs=10, warmups=1, lr=0.001, save_dir="", resume_ckpt="", start_epoch=None, save_freq=3):
     if resume_ckpt != "":
       if start_epoch is None:
         start_epoch = int(resume_ckpt.split("_")[-1].split(".")[0]) + 1
@@ -211,6 +222,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, epochs=10
 
         # save the model
         if save_dir != "":
+          if (epoch + 1) % save_freq == 0 or epoch == epochs - 1:
             torch.save(model.state_dict(), os.path.join(save_dir, f"model_{epoch}.pth"))
 
         acc, bacc, auroc, auprc, precision, recall = classification_metrics(y_true, y_pred, y_scores)
@@ -245,7 +257,7 @@ def evaluate_model(model, test_loader):
     return y_true, y_pred, y_scores
 
 
-def train_main(dataset_dir: str, model_name="vit_small_patch14_dinov2.lvd142m", image_size=224, batch_size=32, lr=0.001, epochs=10, warmups=1, weight_decay=0.01, save_dir="outputs/", resume_ckpt="", freeze_backbone=False, exp_name="", start_epoch=None):
+def train_main(dataset_dir: str, model_name="vit_small_patch14_dinov2.lvd142m", image_size=224, batch_size=32, lr=0.001, epochs=10, warmups=1, weight_decay=0.01, save_dir="outputs/", resume_ckpt="", freeze_backbone=False, exp_name="", start_epoch=None, opt = "Adam", training_ratio=1.0, country="All"):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print("Training on device: ", device)
     # create save dir
@@ -256,7 +268,10 @@ def train_main(dataset_dir: str, model_name="vit_small_patch14_dinov2.lvd142m", 
     # create wandb
     writer = wandb.init(project="Solar-PV-classification-finetuning-" + exp_code)
     # create dataset
-    train_csv = os.path.join(dataset_dir, "train.csv")
+    if country == "All":
+      train_csv = os.path.join(dataset_dir, "train.csv")
+    else:
+      train_csv = os.path.join(dataset_dir, f"train_{country}.csv")
     val_csv = os.path.join(dataset_dir, "val.csv")
     test_csv = os.path.join(dataset_dir, "test.csv")
     # create model
@@ -265,15 +280,18 @@ def train_main(dataset_dir: str, model_name="vit_small_patch14_dinov2.lvd142m", 
     print("The number of trainable parameters: ", sum(p.numel() for p in model.parameters() if p.requires_grad))
     # create loss and optimizer
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    if opt == "Adam":
+      optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    elif opt == "AdamW":
+      optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
-    train_dataset = ImageDataset(csv_file=train_csv, transform=TRAIN_TRANSFORM)
+    train_dataset = ImageDataset(csv_file=train_csv, transform=TRAIN_TRANSFORM, training_ratio=training_ratio)
     val_dataset = ImageDataset(csv_file=val_csv, transform=VAL_TRANSFORM)
     test_dataset = ImageDataset(csv_file=test_csv, transform=VAL_TRANSFORM)
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=40)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=40)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=40)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=30)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=30)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=30)
     train_model(model, train_loader, val_loader, criterion, optimizer, epochs=epochs, warmups=warmups, lr=lr, save_dir=save_dir, resume_ckpt=resume_ckpt, start_epoch=start_epoch)
     evaluate_model(model, test_loader)
     # save model
