@@ -7,7 +7,7 @@ The rapid deployment of solar photovoltaic (PV) systems has created a growing ch
 ### Model Overview
 The model architecture and workflow are illustrated below:
 
-![Model Overview](Figure/Figure%201.png)
+![Model Overview](Figure/overview.png)
 
 ## Environment Setup
 To replicate this project and run the provided Jupyter Notebooks, follow the steps below to set up the required environment.
