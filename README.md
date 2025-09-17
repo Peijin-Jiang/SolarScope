@@ -1,6 +1,6 @@
 # SolarScope: Estimating Urban Mining Potential of Distributed Solar Panels
 
-## Read the full article published in RCR here:
+## Read the full article published in ES&T here:
 https://pubs.acs.org/doi/10.1021/acs.est.5c01600
 
 
