@@ -3,6 +3,8 @@
 ## Read the full article published in ES&T here:
 https://pubs.acs.org/doi/10.1021/acs.est.5c01600
 
+## Watch the model walkthrough video here:
+https://www.youtube.com/watch?v=lkcNNlJeTNA
 
 ## Project Overview
 The rapid deployment of solar photovoltaic (PV) systems has created a growing challenge in managing end-of-life panels. While many studies project future recycling potential, they are often limited by the lack of data on existing distributed PV installations. To address this need, we developed SolarScope, an open-source model that integrates computer vision (CV) with dynamic material flow analysis (dMFA) to automatically identify distributed PV panel areas and evaluate the urban mining potential. By leveraging satellite imagery and Vision Transformer (ViT) models, SolarScope achieves an Area under the Receiver Operating Characteristic Curve (AUROC) of 0.93 for classification and a Dice Similarity Coefficient (Dice) score of 0.90 for segmenting distributed PV installations. A case study in Kamakura, Japan, demonstrates the model’s transferability and its ability to support material recovery assessments at fine spatial scales. We present a methodological framework that combines CV with dMFA to bottom-up estimate the regional material stock and recycling potential of distributed PV systems, providing a scalable solution to overcome data limitations in conventional material flow analysis and contributing to circular economy advancement.
